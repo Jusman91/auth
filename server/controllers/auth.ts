@@ -1,6 +1,5 @@
 import { RequestHandler } from 'express';
 import prisma from '../lib/prisma';
-import { createError } from '../middleware/error';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import {
 	comparePassword,
@@ -8,6 +7,7 @@ import {
 	generateAccessToken,
 	validation,
 } from '../lib/utils';
+import { createError } from '../middleware';
 
 export const register: RequestHandler = async (
 	req,

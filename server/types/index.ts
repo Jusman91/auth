@@ -13,3 +13,11 @@ export type AuthValidationName =
 	| 'login'
 	| 'forgot-password'
 	| 'reset-password';
+
+export interface IUserPayload {
+	id: string;
+	role: string;
+}
+export interface IUserRequest extends Request {
+	user?: IUserPayload;
+}

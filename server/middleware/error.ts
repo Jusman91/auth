@@ -1,8 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-
-interface ICustomError extends Error {
-	status?: number;
-}
+import { ICustomError } from '../types';
 
 export const createError = (
 	status: number,

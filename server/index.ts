@@ -1,15 +1,16 @@
-import dotenv from 'dotenv';
+// import dotenv from 'dotenv';
 import express from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import morgan from 'morgan';
 import connectToDB from './config/db';
 import authRoutes from './routes/auth';
+import usersRoutes from './routes/users';
 import { errorHandler } from './middleware/error';
+import { PORT } from './config';
 
-dotenv.config();
+// dotenv.config();
 const app = express();
-const PORT = process.env.PORT || 5000;
 
 // middleware
 app.use(express.json());
@@ -22,6 +23,7 @@ app.use(cookieParser());
 const v1 = '/api/mebuzz/v1';
 
 app.use(`${v1}/auth`, authRoutes);
+app.use(`${v1}/users`, usersRoutes);
 
 // errors handler should be the last middleware
 app.use(errorHandler);
