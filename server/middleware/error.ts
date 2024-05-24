@@ -21,7 +21,8 @@ export const errorHandler = (
 	next: NextFunction,
 ) => {
 	const errStatus = err.status || 500;
-	const errMessage = err.message || 'Something went wrong!';
+	let errMessage = err.message || 'Something went wrong!';
+
 	return res.status(errStatus).json({
 		success: false,
 		status: errStatus,

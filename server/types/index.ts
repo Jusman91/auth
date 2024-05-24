@@ -1,7 +1,15 @@
-import { NextFunction, Request, Response } from 'express';
+import { Request } from 'express';
 
-export interface IControllerParams {
-	req: Request;
-	res: Response;
-	next: NextFunction;
+export interface ICustomError extends Error {
+	status?: number;
 }
+
+export type validationSchema = (
+	data: Request,
+) => Promise<void | null>;
+
+export type AuthValidationName =
+	| 'register'
+	| 'login'
+	| 'forgot-password'
+	| 'reset-password';
