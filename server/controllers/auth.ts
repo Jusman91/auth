@@ -5,9 +5,16 @@ import {
 	comparePassword,
 	encrypPassword,
 	generateAccessToken,
+	generateForgotPasswordToken,
 	validation,
 } from '../lib/utils';
-import { createError } from '../middleware';
+import {
+	createError,
+	verifyTokenResetPassword,
+} from '../middleware';
+import { ISendMailParams, IUserRequest } from '../types';
+import { CLIENT_URL } from '../config';
+import { sendEmail } from '../lib/nodemailer';
 
 export const register: RequestHandler = async (
 	req,
@@ -82,6 +89,70 @@ export const login: RequestHandler = async (
 			message: 'Login successful',
 			accessToken,
 		});
+	} catch (error) {
+		next(error);
+	}
+};
+
+export const forgotPassword: RequestHandler = async (
+	req: IUserRequest,
+	res,
+	next,
+) => {
+	const { email } = req.body;
+	try {
+		const existingUser = await prisma.user.findUnique({
+			where: { email },
+		});
+		if (!existingUser)
+			return next(createError(404, 'User does not exist'));
+
+		const token = generateForgotPasswordToken({
+			id: existingUser.id,
+			role: existingUser.role,
+		});
+		const url = `${CLIENT_URL}/reset_password/${existingUser.id}/${token}`;
+
+		sendEmail({
+			to: existingUser.email,
+			subject: 'Forgot_Password',
+			url: url,
+			btnText: 'Reset Password',
+		});
+
+		res.status(200).json({
+			message: 'Success! Please check your email',
+		});
+	} catch (error) {
+		next(error);
+	}
+};
+
+export const resetPassword: RequestHandler = async (
+	req: IUserRequest,
+	res,
+	next,
+) => {
+	const { id, token } = req.params;
+	try {
+		const { password } = req.body;
+
+		await verifyTokenResetPassword(token, id, next);
+
+		const { hashedPassword } = await encrypPassword(
+			password,
+		);
+
+		await prisma.user.update({
+			where: { id },
+			data: {
+				password: hashedPassword,
+			},
+		});
+
+		res
+			.status(200)
+			.json({ message: 'Reset password success' });
 	} catch (error) {
 		next(error);
 	}
