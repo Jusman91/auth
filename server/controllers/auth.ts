@@ -2,8 +2,12 @@ import { RequestHandler } from 'express';
 import prisma from '../lib/prisma';
 import { createError } from '../middleware/error';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
-import { validation } from '../lib/utils/validations';
-import { encrypPassword } from '../lib/utils/encryptions';
+import {
+	comparePassword,
+	encrypPassword,
+	generateAccessToken,
+	validation,
+} from '../lib/utils';
 
 export const register: RequestHandler = async (
 	req,
@@ -49,5 +53,36 @@ export const register: RequestHandler = async (
 		} else {
 			next(error);
 		}
+	}
+};
+
+export const login: RequestHandler = async (
+	req,
+	res,
+	next,
+) => {
+	const { email, password } = req.body;
+	try {
+		await validation.auth.login(req.body);
+		const existingUser = await prisma.user.findUnique({
+			where: { email },
+		});
+
+		if (!existingUser)
+			return next(createError(400, 'User does not exist'));
+
+		await comparePassword(password, existingUser.password);
+
+		const accessToken = generateAccessToken({
+			id: existingUser.id,
+			role: existingUser.role,
+		});
+		console.log(accessToken);
+		res.status(200).json({
+			message: 'Login successful',
+			accessToken,
+		});
+	} catch (error) {
+		next(error);
 	}
 };
