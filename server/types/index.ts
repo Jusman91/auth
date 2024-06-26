@@ -1,4 +1,4 @@
-import { Request } from 'express';
+import { NextFunction, Request, Response } from 'express';
 
 export interface ICustomError extends Error {
 	status?: number;
