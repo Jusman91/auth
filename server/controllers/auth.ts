@@ -2,8 +2,6 @@ import { RequestHandler } from 'express';
 import prisma from '../lib/prisma';
 import { createError } from '../middleware/error';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
-import { validation } from '../lib/utils/validations';
-import { encrypPassword } from '../lib/utils/encryptions';
 
 export const register: RequestHandler = async (
 	req,
@@ -12,30 +10,21 @@ export const register: RequestHandler = async (
 ) => {
 	const { username, email, password } = req.body;
 	try {
-		await validation.auth.register(req.body);
 		const existingUser = await prisma.user.findUnique({
 			where: { email },
 		});
-
 		if (existingUser) {
 			return next(createError(400, 'Email already exists'));
 		}
-
-		const { hashedPassword } = await encrypPassword(
-			password,
-		);
-
-		await prisma.user.create({
+		const newUser = await prisma.user.create({
 			data: {
 				username,
 				email,
-				password: hashedPassword,
+				password,
 			},
 		});
 
-		res
-			.status(200)
-			.json({ message: 'User created successfully' });
+		res.status(200).json(newUser);
 	} catch (error) {
 		if (error instanceof PrismaClientKnownRequestError) {
 			if (error.code === 'P2002') {
