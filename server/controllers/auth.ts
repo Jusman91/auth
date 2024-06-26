@@ -1,6 +1,7 @@
 import { RequestHandler } from 'express';
 import prisma from '../lib/prisma';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
+<<<<<<< HEAD
 import {
 	comparePassword,
 	encrypPassword,
@@ -8,6 +9,8 @@ import {
 	validation,
 } from '../lib/utils';
 import { createError } from '../middleware';
+=======
+>>>>>>> master
 
 export const register: RequestHandler = async (
 	req,
@@ -16,30 +19,21 @@ export const register: RequestHandler = async (
 ) => {
 	const { username, email, password } = req.body;
 	try {
-		await validation.auth.register(req.body);
 		const existingUser = await prisma.user.findUnique({
 			where: { email },
 		});
-
 		if (existingUser) {
 			return next(createError(400, 'Email already exists'));
 		}
-
-		const { hashedPassword } = await encrypPassword(
-			password,
-		);
-
-		await prisma.user.create({
+		const newUser = await prisma.user.create({
 			data: {
 				username,
 				email,
-				password: hashedPassword,
+				password,
 			},
 		});
 
-		res
-			.status(200)
-			.json({ message: 'User created successfully' });
+		res.status(200).json(newUser);
 	} catch (error) {
 		if (error instanceof PrismaClientKnownRequestError) {
 			if (error.code === 'P2002') {
@@ -53,36 +47,5 @@ export const register: RequestHandler = async (
 		} else {
 			next(error);
 		}
-	}
-};
-
-export const login: RequestHandler = async (
-	req,
-	res,
-	next,
-) => {
-	const { email, password } = req.body;
-	try {
-		await validation.auth.login(req.body);
-		const existingUser = await prisma.user.findUnique({
-			where: { email },
-		});
-
-		if (!existingUser)
-			return next(createError(400, 'User does not exist'));
-
-		await comparePassword(password, existingUser.password);
-
-		const accessToken = generateAccessToken({
-			id: existingUser.id,
-			role: existingUser.role,
-		});
-		console.log(accessToken);
-		res.status(200).json({
-			message: 'Login successful',
-			accessToken,
-		});
-	} catch (error) {
-		next(error);
 	}
 };
