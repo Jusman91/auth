@@ -1,8 +1,3 @@
-import { IThemeContext } from '@/types';
-import {
-	getTheme,
-	saveTheme,
-} from '@/lib/utils/local-storage';
 import {
 	ReactNode,
 	createContext,
@@ -10,6 +5,11 @@ import {
 	useMemo,
 	useState,
 } from 'react';
+import { IThemeContext } from '@/types';
+import {
+	getThemeInStorage,
+	saveThemeToStorage,
+} from '@/lib/utils/storage';
 
 const initialValue = {
 	myTheme: 'light',
@@ -25,13 +25,13 @@ export const ThemeContextProvider = ({
 	children: ReactNode;
 }) => {
 	const [myTheme, setMyTheme] = useState(
-		getTheme() || 'light',
+		getThemeInStorage() || 'dark',
 	);
 
 	const toggleMyTheme = () => {
 		setMyTheme((prev) => {
 			const newTheme = prev === 'light' ? 'dark' : 'light';
-			saveTheme(newTheme);
+			saveThemeToStorage(newTheme);
 			return newTheme;
 		});
 	};

@@ -71,7 +71,7 @@
 		--color-danger-90: 359 46% 19%;
 	}
 	:root[data-theme='dark'] {
-		--bg-base: 198 31% 96%;
+		--bg-base: 249 100% 4%;
 		--color-base: 0 0% 100%;
 		--bg-container: 198 32% 14%;
 		--color-primary: 191 81% 19%;
@@ -82,6 +82,24 @@
 	}
 	body {
 		@apply container max-w-[1440px] mx-auto;
+	}
+	.text-h1 {
+		@apply text-clamp-h1 text-color-base font-semibold leading-tight;
+	}
+	.text-h2 {
+		@apply text-clamp-h2 text-color-base font-semibold leading-tight;
+	}
+	.text-h3 {
+		@apply text-clamp-h3 text-color-base font-semibold leading-tight;
+	}
+	.text-h4 {
+		@apply text-clamp-h4 text-color-base font-semibold leading-tight;
+	}
+	.text-h5 {
+		@apply text-clamp-h5 text-color-base font-semibold leading-tight;
+	}
+	.text-h6 {
+		@apply text-clamp-h6 text-color-base font-semibold leading-7;
 	}
 }
 
@@ -99,4 +117,25 @@
 .ant-modal-root .ant-modal-wrap {
 	backdrop-filter: blur(10px);
 	-webkit-backdrop-filter: blur(10px);
+}
+.ant-modal .ant-modal-content {
+	padding: 0;
+}
+
+.text-gradient {
+	background: linear-gradient(
+			0deg,
+			rgba(255, 255, 255, 0.4),
+			rgba(255, 255, 255, 0.4)
+		),
+		linear-gradient(
+			90.01deg,
+			#e59cff 0.01%,
+			#6ee2f5 50.01%,
+			#9cb2ff 100%
+		);
+	background-blend-mode: normal, screen;
+	-webkit-background-clip: text;
+	background-clip: text;
+	-webkit-text-fill-color: transparent;
 }

@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import { NextFunction, RequestHandler } from 'express';
+import { RequestHandler } from 'express';
 import { IUserPayload, IUserRequest } from '../types';
 import {
 	ACCESS_TOKEN_SECRET_KEY,
@@ -25,7 +25,7 @@ export const verifyToken: RequestHandler = (
 			req.user = decoded;
 			next();
 		} catch (err) {
-			next(createError(400, 'Invalid token.'));
+			next(createError(401, 'Unauthorized'));
 		}
 	} else return next(createError(401, 'Unauthorized'));
 };
@@ -33,16 +33,16 @@ export const verifyToken: RequestHandler = (
 export const verifyTokenResetPassword = async (
 	token: string,
 	id: string,
-	next: NextFunction,
 ) => {
 	try {
 		const decoded = jwt.verify(
 			token,
 			`${FORGOT_PASSWORD_TOKEN_SECRET_KEY}`,
 		) as IUserPayload;
-		if (decoded.id !== id)
-			return next(createError(401, 'Invalid token'));
+		if (decoded.id !== id) {
+			throw createError(401, 'Invalid token');
+		}
 	} catch (error) {
-		next(createError(401, 'Invalid or expired token'));
+		throw createError(401, 'Invalid or expired token');
 	}
 };

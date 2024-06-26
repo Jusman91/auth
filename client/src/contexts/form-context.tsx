@@ -1,41 +1,72 @@
-import { useToggle } from '@/hooks/use-toggle';
-import { IFormContext } from '@/types';
-import { Form, type UploadFile } from 'antd';
+import { IFormContext, IFormProviderProps } from '@/types';
+import { Form } from 'antd';
 import {
-	ReactNode,
 	createContext,
+	useCallback,
+	useEffect,
 	useMemo,
 	useState,
 } from 'react';
 
 export const FormContext = createContext<
-	IFormContext | undefined
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	IFormContext<any> | undefined
 >(undefined);
 
-export const FormContextProvider = ({
+export const FormContextProvider = <TValues,>({
 	children,
-}: {
-	children: ReactNode;
-}) => {
+	name,
+}: IFormProviderProps) => {
 	const [form] = Form.useForm();
-	const [open, setOpen] = useToggle(false);
-	const [formName, setFormName] = useState('');
-	const [submittable, setSubmittable] = useState(true);
-	const [objURL, setObjURL] = useState<UploadFile>();
+	const [submittable, setSubmittable] = useState(false);
+	const values = Form.useWatch([], form); // watch for changes to the values
 
-	const valueContext = useMemo(() => {
-		return {
-			open,
-			setOpen,
-			form,
-			setFormName,
-			submittable,
-			setSubmittable,
-			setObjURL,
-			formName,
-			objURL,
+	const setFieldsValue = useCallback(
+		(values: TValues) => {
+			form.setFieldsValue(values);
+		},
+		[form],
+	);
+
+	const resetFieldsValue = useCallback(() => {
+		form.resetFields();
+	}, [form]);
+
+	useEffect(() => {
+		const validate = async () => {
+			try {
+				await form.validateFields({ validateOnly: true });
+				setSubmittable(true);
+			} catch {
+				setSubmittable(false);
+			}
 		};
-	}, [open, setOpen, form, submittable, formName, objURL]);
+
+		validate();
+	}, [form, values]);
+
+	useEffect(() => {
+		form.resetFields();
+	}, [form, name]);
+
+	const valueContext: IFormContext<TValues> =
+		useMemo(() => {
+			return {
+				form,
+				name,
+				values,
+				submittable,
+				resetFieldsValue,
+				setFieldsValue,
+			};
+		}, [
+			form,
+			name,
+			resetFieldsValue,
+			setFieldsValue,
+			submittable,
+			values,
+		]);
 	return (
 		<FormContext.Provider value={valueContext}>
 			{children}

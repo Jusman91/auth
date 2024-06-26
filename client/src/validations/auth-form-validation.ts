@@ -1,20 +1,36 @@
-import { IRulesLogin } from '@/types';
+import { FormName, IRulesAuth } from '@/types';
 
-export const authFormLoginValidations: IRulesLogin = {
-	email: [
-		{
-			type: 'email',
-			message: 'The input is not valid Email!',
-		},
-		{
-			required: true,
-			message: 'Email masih kosong!',
-		},
+const baseRules: IRulesAuth = {
+	// some use the default message
+	username: [
+		{ required: true },
+		{ min: 3 },
+		{ max: 15 },
+		{ whitespace: true },
 	],
-	password: [
-		{
-			required: true,
-			message: 'Password masih kosong!',
-		},
+	email: [{ type: 'email' }, { required: true }],
+	password: [{ required: true }, { min: 6 }],
+	confirmPassword: [
+		{ required: true },
+		({ getFieldValue }) => ({
+			validator(_, value) {
+				if (!value || getFieldValue('password') === value) {
+					return Promise.resolve();
+				}
+				return Promise.reject('Password not match');
+			},
+		}),
 	],
+};
+
+export const getAuthFormValidations = (
+	formName: FormName,
+): IRulesAuth => {
+	const rules = { ...baseRules };
+
+	if (formName === 'login') {
+		rules.password = [{ required: true }];
+	}
+
+	return rules;
 };

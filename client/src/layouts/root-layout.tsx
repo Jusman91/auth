@@ -1,25 +1,27 @@
-import { FormContextProvider } from '@/contexts/form-context';
-import { useAuthContext } from '@/hooks/use-context';
-import { useTheme } from '@/hooks/use-theme';
-import { ConfigProvider, Layout } from 'antd';
 import { Navigate, Outlet } from 'react-router-dom';
+import { ConfigProvider, Layout } from 'antd';
+import { useThemeContext } from '@/hooks';
+import {
+	getAuthenticatedInStorage,
+	getUserInStorage,
+} from '@/lib/utils/storage';
+import { themeToken } from '@/theme';
 
 const RootLayout = () => {
-	const { rootTheme } = useTheme();
-	const { isAuthenticated, user } = useAuthContext();
-
+	const { myTheme } = useThemeContext();
+	const { rootTheme } = themeToken(myTheme);
+	const user = getUserInStorage();
+	const isAuthenticated = getAuthenticatedInStorage();
 	if (!isAuthenticated && !user)
-		return <Navigate to={'/authentication/login'} />;
+		return <Navigate to={'/auth/login'} />;
 
 	return (
 		<ConfigProvider theme={rootTheme}>
-			<FormContextProvider>
-				<main>
-					<Layout>
-						<Outlet />
-					</Layout>
-				</main>
-			</FormContextProvider>
+			<main>
+				<Layout className='relative w-full min-h-screen overflow-x-hidden bg-bkg-base'>
+					<Outlet />
+				</Layout>
+			</main>
 		</ConfigProvider>
 	);
 };

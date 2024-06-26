@@ -1,8 +1,8 @@
 import axios from 'axios';
 import {
-	clearUser,
-	getAccessToken,
-} from '../utils/local-storage';
+	clearUserInStorage,
+	getAccessTokenInStorage,
+} from '../utils/storage';
 
 const axiosInstance = axios.create({
 	baseURL: `${import.meta.env.VITE_API_URL}`,
@@ -12,7 +12,7 @@ const axiosInstance = axios.create({
 });
 
 axiosInstance.interceptors.request.use((req) => {
-	const accessToken = getAccessToken();
+	const accessToken = getAccessTokenInStorage();
 	if (accessToken) {
 		req.headers.Authorization = `Bearer ${accessToken}`;
 	}
@@ -25,8 +25,8 @@ axiosInstance.interceptors.response.use(
 	},
 	(error) => {
 		if (error.response && error.response.status === 401) {
-			clearUser();
-			window.location.href = '/authentication/login';
+			clearUserInStorage();
+			window.location.href = '/auth/token-expired';
 		}
 		return Promise.reject(error);
 	},
