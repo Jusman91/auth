@@ -1,19 +1,19 @@
 import { BrowserRouter } from 'react-router-dom';
-import { AuthContextProvider } from '@/contexts/auth-context';
-import { ThemeContextProvider } from '@/contexts/theme-context';
-import QueryProviders from '@/lib/react-query/query-providers';
+import { ThemeContextProvider } from '@/contexts';
 import Routes from '@/routes';
+import { QueryProviders } from '@/lib/react-query';
+import ScrollToTop from '@/components/scroll-to-top';
 
 const App = () => {
 	return (
 		<BrowserRouter>
-			<ThemeContextProvider>
-				<QueryProviders>
-					<AuthContextProvider>
+			<ScrollToTop>
+				<ThemeContextProvider>
+					<QueryProviders>
 						<Routes />
-					</AuthContextProvider>
-				</QueryProviders>
-			</ThemeContextProvider>
+					</QueryProviders>
+				</ThemeContextProvider>
+			</ScrollToTop>
 		</BrowserRouter>
 	);
 };

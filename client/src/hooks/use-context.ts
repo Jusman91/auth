@@ -1,13 +1,10 @@
-import { AuthContext } from '@/contexts/auth-context';
-import { FormContext } from '@/contexts/form-context';
-import { ThemeContext } from '@/contexts/theme-context';
+import { useContext } from 'react';
 import {
-	IAuthContext,
 	IErrorUseContext,
 	IFormContext,
 	IThemeContext,
 } from '@/types';
-import { useContext } from 'react';
+import { FormContext, ThemeContext } from '@/contexts';
 
 const throwError = ({
 	context,
@@ -25,15 +22,10 @@ export function useThemeContext(): IThemeContext {
 	throwError({ context, message: 'ThemeContext' });
 	return context as IThemeContext;
 }
-
-export function useFormContext(): IFormContext {
+export function useFormContext<
+	TValues,
+>(): IFormContext<TValues> {
 	const context = useContext(FormContext);
 	throwError({ context, message: 'FormContext' });
-	return context as IFormContext;
-}
-
-export function useAuthContext(): IAuthContext {
-	const context = useContext(AuthContext);
-	throwError({ context, message: 'AuthContext' });
-	return context as IAuthContext;
+	return context as IFormContext<TValues>;
 }

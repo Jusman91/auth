@@ -10,6 +10,7 @@ export const authValidationSchema = (
 			return (schema = Yup.object().shape({
 				username: Yup.string()
 					.required('Username is required')
+					.min(3, 'Username must be at least 3 characters')
 					.max(15, 'Username is up to 15 characters'),
 				email: Yup.string()
 					.email('Invalid email address')

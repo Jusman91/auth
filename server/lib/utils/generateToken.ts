@@ -6,7 +6,7 @@ import {
 
 export const generateAccessToken = (payload: object) => {
 	return jwt.sign(payload, `${ACCESS_TOKEN_SECRET_KEY}`, {
-		expiresIn: '1d',
+		expiresIn: '1h',
 	});
 };
 
@@ -17,7 +17,7 @@ export const generateForgotPasswordToken = (
 		payload,
 		`${FORGOT_PASSWORD_TOKEN_SECRET_KEY}`,
 		{
-			expiresIn: '1h',
+			expiresIn: '5m',
 		},
 	);
 };

@@ -12,9 +12,17 @@ import {
 	createError,
 	verifyTokenResetPassword,
 } from '../middleware';
-import { ISendMailParams, IUserRequest } from '../types';
-import { CLIENT_URL } from '../config';
+import {
+	ISendMailParams,
+	IUserPayload,
+	IUserRequest,
+} from '../types';
+import {
+	CLIENT_URL,
+	FORGOT_PASSWORD_TOKEN_SECRET_KEY,
+} from '../config';
 import { sendEmail } from '../lib/nodemailer';
+import jwt from 'jsonwebtoken';
 
 export const register: RequestHandler = async (
 	req,
@@ -111,7 +119,7 @@ export const forgotPassword: RequestHandler = async (
 			id: existingUser.id,
 			role: existingUser.role,
 		});
-		const url = `${CLIENT_URL}/reset_password/${existingUser.id}/${token}`;
+		const url = `${CLIENT_URL}/auth/reset-password/${existingUser.id}/${token}`;
 
 		sendEmail({
 			to: existingUser.email,
@@ -137,7 +145,7 @@ export const resetPassword: RequestHandler = async (
 	try {
 		const { password } = req.body;
 
-		await verifyTokenResetPassword(token, id, next);
+		await verifyTokenResetPassword(token, id);
 
 		const { hashedPassword } = await encrypPassword(
 			password,

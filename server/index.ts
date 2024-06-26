@@ -20,7 +20,7 @@ app.use(morgan('dev'));
 app.use(cookieParser());
 
 // routes
-const v1 = '/api/mebuzz/v1';
+const v1 = '/api/mediscover/v1';
 
 app.use(`${v1}/auth`, authRoutes);
 app.use(`${v1}/users`, usersRoutes);
