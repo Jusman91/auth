@@ -9,10 +9,5 @@ export const validation = {
 				'register',
 			) as unknown as Yup.ObjectSchema<any>,
 		),
-		login: customValidationReqBody(
-			authValidationSchema(
-				'login',
-			) as unknown as Yup.ObjectSchema<any>,
-		),
 	},
 };
