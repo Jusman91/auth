@@ -1,5 +1,5 @@
 import bcrypt from 'bcryptjs';
-import { createError } from '../../middleware/error';
+import { createError } from '../../middleware';
 
 export const encrypPassword = async (password: string) => {
 	const hashedPassword = await bcrypt.hash(password, 10);

@@ -1,10 +1,10 @@
 import mongoose from 'mongoose';
+import { DATABASE_URL } from './env';
 
 mongoose.set('strictQuery', false);
 const connectToDB = async () => {
-	const url = process.env.DATABASE_URL;
 	try {
-		await mongoose.connect(`${url}`);
+		await mongoose.connect(`${DATABASE_URL}`);
 		console.log('Connect to the mongoDB successfully');
 	} catch (error) {
 		console.error(

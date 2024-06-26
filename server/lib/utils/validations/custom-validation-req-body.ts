@@ -1,7 +1,7 @@
 import * as Yup from 'yup';
 import { validationSchema } from '../../../types';
-import { createError } from '../../../middleware/error';
 import { Request } from 'express';
+import { createError } from '../../../middleware';
 
 export const customValidationReqBody =
 	(schema: Yup.ObjectSchema<any>): validationSchema =>
