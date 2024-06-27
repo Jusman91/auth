@@ -35,3 +35,30 @@ export const userLoggedIn: RequestHandler = async (
 		next(error);
 	}
 };
+
+export const deleteUser: RequestHandler = async (
+	req,
+	res,
+	next,
+) => {
+	const { id } = req.params;
+	try {
+		if (!mongoose.Types.ObjectId.isValid(id))
+			return next(createError(404, 'User not found'));
+
+		const existingUser = await prisma.user.findUnique({
+			where: { id },
+		});
+
+		if (!existingUser)
+			return next(createError(404, 'User not found'));
+
+		await prisma.user.delete({ where: { id } });
+
+		res
+			.status(200)
+			.json({ message: 'User deleted successfully' });
+	} catch (error) {
+		next(error);
+	}
+};

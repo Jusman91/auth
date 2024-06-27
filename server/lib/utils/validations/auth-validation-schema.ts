@@ -32,6 +32,12 @@ export const authValidationSchema = (
 			return (schema = Yup.object().shape({
 				email: Yup.string().email('Invalid email address'),
 			}));
+		case 'reset-password':
+			return (schema = Yup.object().shape({
+				password: Yup.string().required(
+					'Password is required',
+				),
+			}));
 		default:
 			return schema;
 	}

@@ -21,7 +21,15 @@ export enum keys {
 	LOGGEDIN = 'logged-in',
 	FORGOT_PASSWORD = 'forgot-password',
 	RESET_PASSWORD = 'reset-password',
+	DELETE_USER = 'delete-user',
 }
+export type MutateFunction<TRes, TVariable> =
+	UseMutateFunction<
+		TRes | undefined,
+		Error | null,
+		TVariable,
+		unknown
+	>;
 export type FormName =
 	| 'register'
 	| 'login'
@@ -54,6 +62,8 @@ export interface IRegisterResponse
 export interface IForgotPasswordResponse
 	extends IMessageResponse {}
 export interface IResetPasswordResponse
+	extends IMessageResponse {}
+export interface IDeleteUserResponse
 	extends IMessageResponse {}
 export interface ILoginResponse extends IRegisterResponse {
 	accessToken: string;
@@ -191,40 +201,29 @@ export interface IHandleLoggedInProps {
 }
 export interface IHandleLoginProps
 	extends IHandleLoggedInProps {
-	userLogin: UseMutateFunction<
-		ILoginResponse | undefined,
-		Error,
-		ILoginUser,
-		unknown
-	>;
+	userLogin: MutateFunction<ILoginResponse, ILoginUser>;
 	openModal: () => void;
 }
 export interface IHandleRegisterProps {
-	userRegister: UseMutateFunction<
-		IRegisterResponse | undefined,
-		Error,
-		IRegisterUser,
-		unknown
+	userRegister: MutateFunction<
+		IRegisterResponse,
+		IRegisterUser
 	>;
 	formFields: IRegisterFields;
 	openModal: () => void;
 }
 export interface IHandleForgotPasswordProps {
-	sendRequest: UseMutateFunction<
-		IForgotPasswordResponse | undefined,
-		Error,
-		IForgotPasswordUser,
-		unknown
+	sendRequest: MutateFunction<
+		IForgotPasswordResponse,
+		IForgotPasswordUser
 	>;
 	formFields: IForgotPasswordFields;
 	openModal: () => void;
 }
 export interface IHandleResetPasswordProps {
-	userResetPassword: UseMutateFunction<
-		IResetPasswordResponse | undefined,
-		Error | null,
-		IResetPasswordUser,
-		unknown
+	userResetPassword: MutateFunction<
+		IResetPasswordResponse,
+		IRegisterUser
 	>;
 	formFields: IResetPasswordFields;
 	openModal: () => void;
@@ -235,7 +234,7 @@ export interface IHandleResetPasswordProps {
 
 // <user>
 export interface IUser {
-	_id: string;
+	id: string;
 	username: string;
 	email: string;
 	profilePic: string;
@@ -243,6 +242,11 @@ export interface IUser {
 	createdAt: string;
 	updatedAt: string;
 	__v: number;
+}
+export interface IHandleDeleteUser {
+	id: string;
+	userDeleted: MutateFunction<IDeleteUserResponse, string>;
+	navigate: (path: string) => void;
 }
 // <user/>
 export interface IAnimateFloatingProps {
@@ -264,12 +268,19 @@ export interface IMenuListData {
 }
 export interface IHandleMenus extends IMenuListData {
 	navigate: (path: string) => void;
+	id: string;
+	userDeleted: UseMutateFunction<
+		IDeleteUserResponse | undefined,
+		Error | null,
+		string,
+		unknown
+	>;
 }
 export interface IMenuButton {
 	setOpen: () => void;
 }
 export interface IMenuListButtonProps {
 	label: LabelMenu;
-	onClick: () => void;
+	onClick: (e: React.MouseEvent) => void;
 }
 //<MENU/>

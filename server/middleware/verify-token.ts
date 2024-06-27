@@ -46,3 +46,19 @@ export const verifyTokenResetPassword = async (
 		throw createError(401, 'Invalid or expired token');
 	}
 };
+
+export const verifyUser: RequestHandler = (
+	req: IUserRequest,
+	res,
+	next,
+) => {
+	verifyToken(req, res, () => {
+		if (req.user?.id === req.params.id) {
+			next();
+		} else {
+			return next(
+				createError(403, 'You are not authorized'),
+			);
+		}
+	});
+};

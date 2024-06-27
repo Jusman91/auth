@@ -1,6 +1,14 @@
 import { RequestHandler } from 'express';
 import prisma from '../lib/prisma';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
+
+import {
+	createError,
+	verifyTokenResetPassword,
+} from '../middleware';
+import { IUserRequest } from '../types';
+import { CLIENT_URL } from '../config';
+import { sendEmail } from '../lib/nodemailer';
 import {
 	comparePassword,
 	encrypPassword,
@@ -8,21 +16,6 @@ import {
 	generateForgotPasswordToken,
 	validation,
 } from '../lib/utils';
-import {
-	createError,
-	verifyTokenResetPassword,
-} from '../middleware';
-import {
-	ISendMailParams,
-	IUserPayload,
-	IUserRequest,
-} from '../types';
-import {
-	CLIENT_URL,
-	FORGOT_PASSWORD_TOKEN_SECRET_KEY,
-} from '../config';
-import { sendEmail } from '../lib/nodemailer';
-import jwt from 'jsonwebtoken';
 
 export const register: RequestHandler = async (
 	req,
@@ -31,21 +24,30 @@ export const register: RequestHandler = async (
 ) => {
 	const { username, email, password } = req.body;
 	try {
+		await validation.auth.register(req.body);
 		const existingUser = await prisma.user.findUnique({
 			where: { email },
 		});
+
 		if (existingUser) {
 			return next(createError(400, 'Email already exists'));
 		}
-		const newUser = await prisma.user.create({
+
+		const { hashedPassword } = await encrypPassword(
+			password,
+		);
+
+		await prisma.user.create({
 			data: {
 				username,
 				email,
-				password,
+				password: hashedPassword,
 			},
 		});
 
-		res.status(200).json(newUser);
+		res
+			.status(200)
+			.json({ message: 'User created successfully' });
 	} catch (error) {
 		if (error instanceof PrismaClientKnownRequestError) {
 			if (error.code === 'P2002') {
@@ -76,14 +78,12 @@ export const login: RequestHandler = async (
 
 		if (!existingUser)
 			return next(createError(400, 'User does not exist'));
-
 		await comparePassword(password, existingUser.password);
 
 		const accessToken = generateAccessToken({
 			id: existingUser.id,
 			role: existingUser.role,
 		});
-		console.log(accessToken);
 		res.status(200).json({
 			message: 'Login successful',
 			accessToken,
@@ -100,6 +100,7 @@ export const forgotPassword: RequestHandler = async (
 ) => {
 	const { email } = req.body;
 	try {
+		await validation.auth.forgotPassword(req.body);
 		const existingUser = await prisma.user.findUnique({
 			where: { email },
 		});
@@ -133,9 +134,9 @@ export const resetPassword: RequestHandler = async (
 	next,
 ) => {
 	const { id, token } = req.params;
+	const { password } = req.body;
 	try {
-		const { password } = req.body;
-
+		await validation.auth.resetPassword(req.body);
 		await verifyTokenResetPassword(token, id);
 
 		const { hashedPassword } = await encrypPassword(

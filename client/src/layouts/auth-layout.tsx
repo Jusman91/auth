@@ -22,7 +22,7 @@ const AuthLayout = () => {
 
 	return (
 		<ConfigProvider theme={authTheme}>
-			<Layout>
+			<Layout className='overflow-hidden'>
 				<section className='relative bg-background-auth bg-cover bg-bottom'>
 					<TwinkleStarsBackground />
 					<div className='w-full grid place-items-center min-h-screen p-4 md:p-16'>

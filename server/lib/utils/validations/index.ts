@@ -14,5 +14,15 @@ export const validation = {
 				'login',
 			) as unknown as Yup.ObjectSchema<any>,
 		),
+		forgotPassword: customValidationReqBody(
+			authValidationSchema(
+				'forgot-password',
+			) as unknown as Yup.ObjectSchema<any>,
+		),
+		resetPassword: customValidationReqBody(
+			authValidationSchema(
+				'reset-password',
+			) as unknown as Yup.ObjectSchema<any>,
+		),
 	},
 };

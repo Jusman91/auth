@@ -6,6 +6,7 @@ import {
 	getUserInStorage,
 } from '@/lib/utils/storage';
 import { themeToken } from '@/theme';
+import { Footer } from '@/components/organisms';
 
 const RootLayout = () => {
 	const { myTheme } = useThemeContext();
@@ -20,6 +21,7 @@ const RootLayout = () => {
 			<main>
 				<Layout className='relative w-full min-h-screen overflow-x-hidden bg-bkg-base'>
 					<Outlet />
+					<Footer />
 				</Layout>
 			</main>
 		</ConfigProvider>

@@ -1,16 +1,17 @@
 import { IHandleMenus } from '@/types';
-import { clearUserInStorage } from '../storage';
+import { hadndleDeleteUser } from './user';
 
 export function handleMenus({
 	label,
 	path,
 	newTab,
 	navigate,
+	userDeleted,
+	id,
 }: IHandleMenus) {
 	if (label === 'logout') {
-		clearUserInStorage();
-	}
-	if (newTab) {
+		hadndleDeleteUser({ id, userDeleted, navigate });
+	} else if (newTab) {
 		window.open(path, '_blank');
 	} else {
 		navigate(path);
