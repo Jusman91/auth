@@ -1,3 +1,4 @@
+import { Loading } from '@/components/atoms';
 import {
 	MenuButton,
 	MenuListButton,
@@ -12,10 +13,11 @@ import { IMenuListData } from '@/types';
 import { useNavigate } from 'react-router-dom';
 
 const Menus = () => {
-	const { id } = getUserInStorage();
+	const user = getUserInStorage();
 	const [open, setOpen] = useToggle(false);
 	const navigate = useNavigate();
-	const { mutate: userDeleted } = useDeleteUser();
+	const { mutate: userDeleted, isPending: isDeleting } =
+		useDeleteUser();
 	const onClick = (
 		e: React.MouseEvent,
 		item: IMenuListData,
@@ -27,7 +29,7 @@ const Menus = () => {
 			newTab: item.newTab,
 			navigate,
 			userDeleted,
-			id,
+			id: user?.id,
 		});
 	};
 	return (
@@ -52,6 +54,14 @@ const Menus = () => {
 					/>
 				))}
 			</div>
+			{isDeleting ? (
+				<Loading
+					className='text-color-base'
+					tip='Loading'
+					size='large'
+					fullscreen
+				/>
+			) : null}
 		</div>
 	);
 };

@@ -27,7 +27,7 @@ export default function Gundam(props: GroupProps) {
 					position={[0, 290, 0]}
 					fontSize={10}
 					fontWeight={700}>
-					{`GU09:[${user.username.toUpperCase()}]`}
+					{`GU09:[${user?.username.toUpperCase()}]`}
 				</Text>
 				<mesh
 					castShadow
