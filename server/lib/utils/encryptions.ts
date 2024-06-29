@@ -3,7 +3,7 @@ import { createError } from '../../middleware';
 
 export const encrypPassword = async (password: string) => {
 	const hashedPassword = await bcrypt.hash(password, 10);
-	return { hashedPassword };
+	return hashedPassword;
 };
 
 export const comparePassword = async (

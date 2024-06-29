@@ -1,32 +1,8 @@
-// import dotenv from 'dotenv';
-import express from 'express';
-import cors from 'cors';
-import cookieParser from 'cookie-parser';
-import morgan from 'morgan';
-import connectToDB from './config/db';
-import authRoutes from './routes/auth';
-import usersRoutes from './routes/users';
-import { errorHandler } from './middleware/error';
 import { PORT } from './config';
+import connectToDB from './config/db';
+import createServer from './lib/utils/server';
 
-// dotenv.config();
-const app = express();
-
-// middleware
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cors());
-app.use(morgan('dev'));
-app.use(cookieParser());
-
-// routes
-const v1 = '/api/mediscover/v1';
-
-app.use(`${v1}/auth`, authRoutes);
-app.use(`${v1}/users`, usersRoutes);
-
-// errors handler should be the last middleware
-app.use(errorHandler);
+const app = createServer();
 
 // server listening on port
 app.listen(PORT, () => {
