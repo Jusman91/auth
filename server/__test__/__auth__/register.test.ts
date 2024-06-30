@@ -3,7 +3,7 @@ import {
 	mockEncrypPassword,
 	mockPrisma,
 	mockValidationBody,
-} from '../mocks';
+} from '../__mocks__';
 import { BASE_URL } from '../../config';
 import createServer from '../../lib/utils/server';
 import { createError } from '../../middleware';
@@ -19,20 +19,18 @@ jest.mock('../../lib/utils', () => ({
 const app = createServer();
 
 describe('Auth controller - Register', () => {
+	const sendDataUser = {
+		username: 'user',
+		email: 'user@example.com',
+		password: 'password',
+	};
 	it('should create a new user and return 200', async () => {
 		mockPrisma.user.findUnique.mockResolvedValue(null);
-		mockEncrypPassword.mockResolvedValue({
-			hashedPassword: 'hashedPassword',
-		});
 		mockPrisma.user.create.mockResolvedValue({});
 
 		const response = await request(app)
 			.post(`${BASE_URL}/auth/register`)
-			.send({
-				username: 'user',
-				email: 'user@example.com',
-				password: 'password',
-			});
+			.send(sendDataUser);
 
 		expect(response.status).toBe(200);
 		expect(response.body).toEqual({
@@ -40,16 +38,12 @@ describe('Auth controller - Register', () => {
 		});
 	});
 	it('should return 400 if email already exists', async () => {
-		mockPrisma.user.findUnique.mockResolvedValue({
-			email: 'user@example.com',
-		});
+		mockPrisma.user.findUnique.mockResolvedValue(
+			sendDataUser.email,
+		);
 		const response = await request(app)
 			.post(`${BASE_URL}/auth/register`)
-			.send({
-				username: 'user',
-				email: 'user@example.com',
-				password: 'password',
-			});
+			.send(sendDataUser);
 		expect(response.status).toBe(400);
 		expect(response.body.message).toBe(
 			'Email already exists',

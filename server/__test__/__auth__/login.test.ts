@@ -3,8 +3,9 @@ import {
 	mockComparePassword,
 	mockGenerateAccessToken,
 	mockPrisma,
+	mockUser,
 	mockValidationBody,
-} from '../mocks';
+} from '../__mocks__';
 import { BASE_URL } from '../../config';
 import createServer from '../../lib/utils/server';
 
@@ -20,22 +21,17 @@ jest.mock('../../lib/utils', () => ({
 const app = createServer();
 
 describe('Auth controller - Login', () => {
+	const sendDataUser = {
+		email: 'user@example.com',
+		password: 'password',
+	};
 	it('should login the user and return 200 with access token', async () => {
-		mockPrisma.user.findUnique.mockResolvedValue({
-			email: 'user@example.com',
-			password: 'password',
-			id: 'userId',
-			role: 'user',
-		});
-		mockComparePassword.mockResolvedValue(true);
+		mockPrisma.user.findUnique.mockResolvedValue(mockUser);
 		mockGenerateAccessToken.mockReturnValue('accessToken');
 
 		const response = await request(app)
 			.post(`${BASE_URL}/auth/login`)
-			.send({
-				email: 'user@example.com',
-				password: 'password',
-			});
+			.send(sendDataUser);
 		console.log('Response body:', response.body);
 		expect(response.status).toBe(200);
 		expect(response.body).toEqual({
@@ -48,10 +44,7 @@ describe('Auth controller - Login', () => {
 		mockPrisma.user.findUnique.mockResolvedValue(null);
 		const response = await request(app)
 			.post(`${BASE_URL}/auth/login`)
-			.send({
-				email: 'user@example.com',
-				password: 'password',
-			});
+			.send(sendDataUser);
 
 		expect(response.status).toBe(404);
 		expect(response.body.message).toBe(

@@ -2,9 +2,10 @@ import request from 'supertest';
 import {
 	mockEncrypPassword,
 	mockPrisma,
+	mockUser,
 	mockValidationBody,
 	mockVerifyTokenResetPassword,
-} from '../mocks';
+} from '../__mocks__';
 import { BASE_URL } from '../../config';
 import createServer from '../../lib/utils/server';
 import { createError } from '../../middleware';
@@ -29,30 +30,21 @@ jest.mock('../../middleware', () => {
 const app = createServer();
 
 describe('Auth controller - Reset Password', () => {
+	const newPassword = 'newPassword';
 	it('should reset password and return 200', async () => {
-		const userId = 'userId';
 		const token = 'resetToken';
-		const newPassword = 'newPassword';
-		mockPrisma.user.findUnique.mockResolvedValue({
-			id: userId,
-			email: 'user@example.com',
-			role: 'user',
-		});
-		mockVerifyTokenResetPassword.mockResolvedValue(true);
-		mockEncrypPassword.mockResolvedValue({
-			hashedPassword: 'newHashedPassword',
-		});
+		mockPrisma.user.findUnique.mockResolvedValue(mockUser);
 		mockPrisma.user.update.mockResolvedValue(true);
 
 		const response = await request(app)
 			.put(
-				`${BASE_URL}/auth/reset_password/${userId}/${token}`,
+				`${BASE_URL}/auth/reset_password/${mockUser.id}/${token}`,
 			)
 			.send({ password: newPassword });
 
 		expect(
 			mockVerifyTokenResetPassword,
-		).toHaveBeenCalledWith(token, userId);
+		).toHaveBeenCalledWith(token, mockUser.id);
 		expect(response.status).toBe(200);
 		expect(response.body).toEqual({
 			message: 'Reset password success',
@@ -60,9 +52,7 @@ describe('Auth controller - Reset Password', () => {
 	});
 
 	it('should return 401 if token verification fails', async () => {
-		const userId = 'userId';
 		const token = 'invalidToken';
-		const newPassword = 'newPassword';
 
 		mockVerifyTokenResetPassword.mockRejectedValue(
 			createError(401, 'Invalid or expired token'),
@@ -70,7 +60,7 @@ describe('Auth controller - Reset Password', () => {
 
 		const response = await request(app)
 			.put(
-				`${BASE_URL}/auth/reset_password/${userId}/${token}`,
+				`${BASE_URL}/auth/reset_password/${mockUser.id}/${token}`,
 			)
 			.send({ password: newPassword });
 

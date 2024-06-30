@@ -3,8 +3,9 @@ import {
 	mockGenerateForgotPasswordToken,
 	mockPrisma,
 	mockSendEmail,
+	mockUser,
 	mockValidationBody,
-} from '../mocks';
+} from '../__mocks__';
 import { BASE_URL } from '../../config';
 import createServer from '../../lib/utils/server';
 
@@ -23,24 +24,14 @@ jest.mock('../../lib/nodemailer', () => ({
 const app = createServer();
 describe('Auth controller - Forgot Password', () => {
 	it('should send a password reset email and return 200', async () => {
-		mockValidationBody.auth.forgotPassword.mockReturnValue(
-			true,
-		);
-		mockPrisma.user.findUnique.mockResolvedValue({
-			email: 'user@example.com',
-			id: 'userId',
-			role: 'user',
-		});
+		mockPrisma.user.findUnique.mockResolvedValue(mockUser);
 		mockGenerateForgotPasswordToken.mockReturnValue(
 			'resetToken',
 		);
-		mockSendEmail.mockResolvedValue(true);
 
 		const response = await request(app)
 			.post(`${BASE_URL}/auth/forgot_password`)
-			.send({
-				email: 'user@example.com',
-			});
+			.send(mockUser.email);
 
 		console.log(response.body, 'response body');
 		expect(response.status).toBe(200);
@@ -53,9 +44,7 @@ describe('Auth controller - Forgot Password', () => {
 		mockPrisma.user.findUnique.mockResolvedValue(null);
 		const response = await request(app)
 			.post(`${BASE_URL}/auth/forgot_password`)
-			.send({
-				email: 'user@example.com',
-			});
+			.send(mockUser.email);
 
 		expect(response.status).toBe(404);
 		expect(response.body.message).toBe(
