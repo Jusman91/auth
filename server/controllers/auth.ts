@@ -33,9 +33,7 @@ export const register: RequestHandler = async (
 			return next(createError(400, 'Email already exists'));
 		}
 
-		const { hashedPassword } = await encrypPassword(
-			password,
-		);
+		const hashedPassword = await encrypPassword(password);
 
 		await prisma.user.create({
 			data: {
@@ -49,6 +47,7 @@ export const register: RequestHandler = async (
 			.status(200)
 			.json({ message: 'User created successfully' });
 	} catch (error) {
+		console.error('Error in register controller:', error);
 		if (error instanceof PrismaClientKnownRequestError) {
 			if (error.code === 'P2002') {
 				return next(
@@ -77,13 +76,14 @@ export const login: RequestHandler = async (
 		});
 
 		if (!existingUser)
-			return next(createError(400, 'User does not exist'));
+			return next(createError(404, 'User does not exist'));
 		await comparePassword(password, existingUser.password);
 
 		const accessToken = generateAccessToken({
 			id: existingUser.id,
 			role: existingUser.role,
 		});
+		console.log('Generated access token:', accessToken);
 		res.status(200).json({
 			message: 'Login successful',
 			accessToken,
@@ -113,7 +113,9 @@ export const forgotPassword: RequestHandler = async (
 		});
 		const url = `${CLIENT_URL}/auth/reset-password/${existingUser.id}/${token}`;
 
-		sendEmail({
+		console.log('Generated token:', token);
+		console.log('Reset URL:', url);
+		await sendEmail({
 			to: existingUser.email,
 			subject: 'Forgot_Password',
 			url: url,
@@ -139,9 +141,7 @@ export const resetPassword: RequestHandler = async (
 		await validation.auth.resetPassword(req.body);
 		await verifyTokenResetPassword(token, id);
 
-		const { hashedPassword } = await encrypPassword(
-			password,
-		);
+		const hashedPassword = await encrypPassword(password);
 
 		await prisma.user.update({
 			where: { id },

@@ -36,13 +36,14 @@ export const userLoggedIn: RequestHandler = async (
 	}
 };
 
-export const deleteUser: RequestHandler = async (
+export const userDelete: RequestHandler = async (
 	req,
 	res,
 	next,
 ) => {
 	const { id } = req.params;
 	try {
+		console.log('ID', id);
 		if (!mongoose.Types.ObjectId.isValid(id))
 			return next(createError(404, 'User not found'));
 

@@ -1,3 +1,3 @@
 export * from './validations';
 export * from './encryptions';
-export * from './generateToken';
+export * from './generate-token';
