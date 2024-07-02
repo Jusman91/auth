@@ -1,8 +1,10 @@
+import { mockHashedPassword } from './mock-data';
+
 export const mockComparePassword = jest.fn();
 export const mockEncrypPassword = jest
 	.fn()
 	.mockResolvedValue({
-		hashedPassword: 'hashedPassword',
+		hashedPassword: mockHashedPassword,
 	});
 export const mockGenerateAccessToken = jest.fn();
 export const mockGenerateForgotPasswordToken = jest.fn();

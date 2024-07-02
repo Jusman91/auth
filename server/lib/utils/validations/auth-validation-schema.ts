@@ -9,9 +9,9 @@ export const authValidationSchema = (
 		case 'register':
 			return (schema = Yup.object().shape({
 				username: Yup.string()
-					.required('Username is required')
 					.min(3, 'Username must be at least 3 characters')
-					.max(15, 'Username is up to 15 characters'),
+					.max(15, 'Username is up to 15 characters')
+					.required('Username is required'),
 				email: Yup.string()
 					.email('Invalid email address')
 					.required('Email is required'),
@@ -30,7 +30,9 @@ export const authValidationSchema = (
 			}));
 		case 'forgot-password':
 			return (schema = Yup.object().shape({
-				email: Yup.string().email('Invalid email address'),
+				email: Yup.string()
+					.email('Invalid email address')
+					.required('Email is required'),
 			}));
 		case 'reset-password':
 			return (schema = Yup.object().shape({
