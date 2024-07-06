@@ -30,6 +30,7 @@ const AuthForm = ({
 			{...props}
 			name={name}
 			initialValues={initialValues}
+			onFinish={props.onFinish}
 			layout='vertical'
 			autoComplete='off'
 			className={cn(

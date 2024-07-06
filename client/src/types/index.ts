@@ -199,16 +199,17 @@ export interface IHandleLoggedInProps {
 	>;
 	formFields: ILoginFields;
 }
-export interface IHandleLoginProps
-	extends IHandleLoggedInProps {
-	userLogin: MutateFunction<ILoginResponse, ILoginUser>;
+export interface IHandleLoginProps {
+	// userLogin: MutateFunction<ILoginResponse, ILoginUser>;
+	formFields: ILoginFields;
+
 	openModal: () => void;
 }
 export interface IHandleRegisterProps {
-	userRegister: MutateFunction<
-		IRegisterResponse,
-		IRegisterUser
-	>;
+	// userRegister: MutateFunction<
+	// 	IRegisterResponse,
+	// 	IRegisterUser
+	// >;
 	formFields: IRegisterFields;
 	openModal: () => void;
 }

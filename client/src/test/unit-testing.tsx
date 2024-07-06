@@ -1,10 +1,10 @@
 /* eslint-disable react-refresh/only-export-components */
-import ScrollToTop from '@/components/scroll-to-top';
+import { ReactElement, ReactNode } from 'react';
+import { render } from '@testing-library/react';
+import { BrowserRouter } from 'react-router-dom';
 import { ThemeContextProvider } from '@/contexts';
 import { QueryProviders } from '@/lib/react-query';
-import { render } from '@testing-library/react';
-import { ReactElement, ReactNode } from 'react';
-import { BrowserRouter } from 'react-router-dom';
+import ScrollToTop from '@/components/scroll-to-top';
 
 const AllTheProviders = ({
 	children,

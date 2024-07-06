@@ -2,9 +2,11 @@ import {
 	AuthForm,
 	AuthModal,
 } from '@/components/organisms';
-import { useFormContext, useModal } from '@/hooks';
-import { useRegister } from '@/lib/react-query';
-import { handleRegister } from '@/lib/utils/handlers';
+import {
+	useFormContext,
+	useModal,
+	useRegister,
+} from '@/hooks';
 import { IRegisterFields } from '@/types';
 import { useNavigate } from 'react-router-dom';
 
@@ -13,22 +15,25 @@ const Register = () => {
 	const { form, name, values } =
 		useFormContext<IRegisterFields>();
 	const {
-		mutate: userRegister,
 		data,
 		error,
-		isPending: loading,
+		loading,
 		isSuccess,
+		handleRegister,
 	} = useRegister();
 	const response = data?.message || error?.message;
 	const description = response ?? '';
+	console.log(description);
 	const { isOpen, closeModal, openModal } = useModal();
 	const handleFinish = () => {
+		console.log('Form values:', values); // Log form values
+		console.log('Open modal function:', openModal); // Log openModal function
 		handleRegister({
-			userRegister,
 			formFields: values,
 			openModal,
 		});
 	};
+
 	const handleAfterClose = () => {
 		if (isSuccess) {
 			navigate('/auth/login');
