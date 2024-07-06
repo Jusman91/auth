@@ -212,10 +212,6 @@ export interface IHandleForgotPasswordProps {
 	openModal: () => void;
 }
 export interface IHandleResetPasswordProps {
-	userResetPassword: MutateFunction<
-		IResetPasswordResponse,
-		IRegisterUser
-	>;
 	formFields: IResetPasswordFields;
 	openModal: () => void;
 	id: string;

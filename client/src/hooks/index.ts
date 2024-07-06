@@ -5,3 +5,4 @@ export { default as useScrollToTop } from './use-scroll-to-top';
 export { default as useRegister } from './use-register';
 export { default as useLogin } from './use-login';
 export { default as useForgotPassword } from './use-forgot-password';
+export { default as useResetPassword } from './use-reset-password';
