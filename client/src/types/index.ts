@@ -199,10 +199,9 @@ export interface IHandleLoggedInProps {
 	>;
 	formFields: ILoginFields;
 }
-export interface IHandleLoginProps
-	extends IHandleLoggedInProps {
-	userLogin: MutateFunction<ILoginResponse, ILoginUser>;
+export interface IHandleLoginProps {
 	openModal: () => void;
+	formFields: ILoginFields;
 }
 export interface IHandleRegisterProps {
 	formFields: IRegisterFields;

@@ -2,7 +2,7 @@ import { loggedInUser } from '@/api';
 import { keys } from '@/types';
 import { useQuery } from '@tanstack/react-query';
 
-export default function useLoggedIn() {
+export default function useLoggedInQuery() {
 	const query = useQuery({
 		queryKey: [keys.LOGGEDIN],
 		queryFn: loggedInUser,
