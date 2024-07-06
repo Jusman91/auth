@@ -199,32 +199,19 @@ export interface IHandleLoggedInProps {
 	>;
 	formFields: ILoginFields;
 }
-export interface IHandleLoginProps
-	extends IHandleLoggedInProps {
-	userLogin: MutateFunction<ILoginResponse, ILoginUser>;
+export interface IHandleLoginProps {
 	openModal: () => void;
+	formFields: ILoginFields;
 }
 export interface IHandleRegisterProps {
-	userRegister: MutateFunction<
-		IRegisterResponse,
-		IRegisterUser
-	>;
 	formFields: IRegisterFields;
 	openModal: () => void;
 }
 export interface IHandleForgotPasswordProps {
-	sendRequest: MutateFunction<
-		IForgotPasswordResponse,
-		IForgotPasswordUser
-	>;
 	formFields: IForgotPasswordFields;
 	openModal: () => void;
 }
 export interface IHandleResetPasswordProps {
-	userResetPassword: MutateFunction<
-		IResetPasswordResponse,
-		IRegisterUser
-	>;
 	formFields: IResetPasswordFields;
 	openModal: () => void;
 	id: string;

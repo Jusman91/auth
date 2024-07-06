@@ -2,9 +2,11 @@ import {
 	AuthForm,
 	AuthModal,
 } from '@/components/organisms';
-import { useFormContext, useModal } from '@/hooks';
-import { useResetPassword } from '@/lib/react-query';
-import { handleResetPassword } from '@/lib/utils/handlers';
+import {
+	useFormContext,
+	useModal,
+	useResetPassword,
+} from '@/hooks';
 import { IResetPasswordFields } from '@/types';
 import { isTokenExpired } from '@/validations';
 import { useEffect } from 'react';
@@ -19,16 +21,15 @@ const ResetPassword = () => {
 		useFormContext<IResetPasswordFields>();
 	const { isOpen, closeModal, openModal } = useModal();
 	const {
-		mutate: userResetPassword,
+		handleResetPassword,
 		data,
-		isPending: loading,
+		loading,
 		isSuccess,
 		error,
 	} = useResetPassword();
 
 	const handleFinish = () => {
 		handleResetPassword({
-			userResetPassword,
 			formFields: values,
 			openModal,
 			id,

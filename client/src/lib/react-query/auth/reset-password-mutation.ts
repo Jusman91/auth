@@ -2,7 +2,7 @@ import { resetPassword } from '@/api';
 import { IResetPasswordUser, keys } from '@/types';
 import { useMutation } from '@tanstack/react-query';
 
-export default function useResetPassword() {
+export default function useResetPasswordMutation() {
 	const mutate = useMutation({
 		mutationKey: [keys.RESET_PASSWORD],
 		mutationFn: ({

@@ -2,9 +2,11 @@ import {
 	AuthForm,
 	AuthModal,
 } from '@/components/organisms';
-import { useFormContext, useModal } from '@/hooks';
-import { useLoggedIn, useLogin } from '@/lib/react-query';
-import { handleLogin } from '@/lib/utils/handlers';
+import {
+	useFormContext,
+	useLogin,
+	useModal,
+} from '@/hooks';
 import { ILoginFields } from '@/types';
 import { useNavigate } from 'react-router-dom';
 
@@ -13,21 +15,13 @@ const Login = () => {
 	const { form, name, values } =
 		useFormContext<ILoginFields>();
 	const { isOpen, closeModal, openModal } = useModal();
-	const {
-		mutate: userLogin,
-		data,
-		error,
-		isSuccess,
-		isPending: loading,
-	} = useLogin();
-	const { refetch: userLoggedIn } = useLoggedIn();
+	const { handleLogin, data, error, isSuccess, loading } =
+		useLogin();
 	const response = data?.message || error?.message;
 	const description = response ?? '';
 	const handleFinish = () => {
 		handleLogin({
-			userLogin,
 			formFields: values,
-			userLoggedIn,
 			openModal,
 		});
 	};
