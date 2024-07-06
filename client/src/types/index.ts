@@ -208,10 +208,6 @@ export interface IHandleRegisterProps {
 	openModal: () => void;
 }
 export interface IHandleForgotPasswordProps {
-	sendRequest: MutateFunction<
-		IForgotPasswordResponse,
-		IForgotPasswordUser
-	>;
 	formFields: IForgotPasswordFields;
 	openModal: () => void;
 }
