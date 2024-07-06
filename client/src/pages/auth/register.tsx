@@ -2,9 +2,11 @@ import {
 	AuthForm,
 	AuthModal,
 } from '@/components/organisms';
-import { useFormContext, useModal } from '@/hooks';
-import { useRegister } from '@/lib/react-query';
-import { handleRegister } from '@/lib/utils/handlers';
+import {
+	useFormContext,
+	useModal,
+	useRegister,
+} from '@/hooks';
 import { IRegisterFields } from '@/types';
 import { useNavigate } from 'react-router-dom';
 
@@ -13,10 +15,10 @@ const Register = () => {
 	const { form, name, values } =
 		useFormContext<IRegisterFields>();
 	const {
-		mutate: userRegister,
+		handleRegister,
 		data,
 		error,
-		isPending: loading,
+		loading,
 		isSuccess,
 	} = useRegister();
 	const response = data?.message || error?.message;
@@ -24,7 +26,6 @@ const Register = () => {
 	const { isOpen, closeModal, openModal } = useModal();
 	const handleFinish = () => {
 		handleRegister({
-			userRegister,
 			formFields: values,
 			openModal,
 		});

@@ -1,5 +1,5 @@
 export { default as QueryProviders } from './query-client';
-export { default as useRegister } from './auth/register-mutation';
+export { default as useRegisterMutation } from './auth/register-mutation';
 export { default as useLogin } from './auth/login-mutation';
 export { default as useLoggedIn } from './auth/loggedin-query';
 export { default as useForgotPassword } from './auth/forgot-password-mutation';

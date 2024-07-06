@@ -205,10 +205,6 @@ export interface IHandleLoginProps
 	openModal: () => void;
 }
 export interface IHandleRegisterProps {
-	userRegister: MutateFunction<
-		IRegisterResponse,
-		IRegisterUser
-	>;
 	formFields: IRegisterFields;
 	openModal: () => void;
 }
