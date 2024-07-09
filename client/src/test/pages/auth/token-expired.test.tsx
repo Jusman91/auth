@@ -1,5 +1,5 @@
 import { TokenExpired } from '@/pages';
-import { render, screen } from '../../unit-testing';
+import { render, screen } from '@/test/unit-testing';
 
 describe('Pages - TokenExpired', () => {
 	it('should render component correctly', () => {

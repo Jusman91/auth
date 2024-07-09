@@ -4,7 +4,7 @@ import {
 	screen,
 	userEvent,
 	waitFor,
-} from '../../unit-testing';
+} from '@/test/unit-testing';
 import { Login } from '@/pages';
 import * as hooks from '@/hooks';
 
