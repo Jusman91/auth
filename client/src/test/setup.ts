@@ -56,3 +56,9 @@ Object.defineProperty(
 		}),
 	},
 );
+
+Object.defineProperty(window, 'getComputedStyle', {
+	value: () => ({
+		getPropertyValue: () => '',
+	}),
+});
