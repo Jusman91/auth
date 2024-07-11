@@ -15,18 +15,18 @@ describe('API - loggedInUser', () => {
 		__v: 0,
 	};
 	it('should loggedIn user successfully', async () => {
-		const postSpy = vi
+		const getSpy = vi
 			.spyOn(axiosInstance, 'get')
 			.mockResolvedValue({ data: mockResponse });
 
 		const result = await loggedInUser();
 		expect(result).toEqual(mockResponse);
-		expect(postSpy).toHaveBeenCalledWith('/users/me');
+		expect(getSpy).toHaveBeenCalledWith('/users/me');
 	});
 
 	it('should call axiosError on failure', async () => {
 		const mockError = new Error('Request failed');
-		const postSpy = vi
+		const getSpy = vi
 			.spyOn(axiosInstance, 'get')
 			.mockRejectedValue(mockError);
 		const axiosErrorSpy = vi.spyOn(api, 'axiosError');
@@ -36,6 +36,6 @@ describe('API - loggedInUser', () => {
 		);
 
 		expect(axiosErrorSpy).toHaveBeenCalledWith(mockError);
-		expect(postSpy).toHaveBeenCalledWith('/users/me');
+		expect(getSpy).toHaveBeenCalledWith('/users/me');
 	});
 });

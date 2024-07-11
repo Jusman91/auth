@@ -19,13 +19,13 @@ describe('API - resetPassword', () => {
 		const mockResponse: IResetPasswordResponse = {
 			message: 'Reset successfully',
 		};
-		const postSpy = vi
+		const putSpy = vi
 			.spyOn(axiosInstance, 'put')
 			.mockResolvedValue({ data: mockResponse });
 
 		const result = await resetPassword(params);
 		expect(result).toEqual(mockResponse);
-		expect(postSpy).toHaveBeenCalledWith(
+		expect(putSpy).toHaveBeenCalledWith(
 			`/auth/reset_password/${params.id}/${params.token}`,
 			params.formFields,
 		);
@@ -33,7 +33,7 @@ describe('API - resetPassword', () => {
 
 	it('should call axiosError on failure', async () => {
 		const mockError = new Error('Request failed');
-		const postSpy = vi
+		const putSpy = vi
 			.spyOn(axiosInstance, 'put')
 			.mockRejectedValue(mockError);
 		const axiosErrorSpy = vi.spyOn(api, 'axiosError');
@@ -43,7 +43,7 @@ describe('API - resetPassword', () => {
 		);
 
 		expect(axiosErrorSpy).toHaveBeenCalledWith(mockError);
-		expect(postSpy).toHaveBeenCalledWith(
+		expect(putSpy).toHaveBeenCalledWith(
 			`/auth/reset_password/${params.id}/${params.token}`,
 			params.formFields,
 		);
