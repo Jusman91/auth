@@ -12,7 +12,7 @@ export default async function resetPassword({
 	try {
 		const { data } =
 			await axiosInstance.put<IResetPasswordResponse>(
-				`auth/reset_password/${id}/${token}`,
+				`/auth/reset_password/${id}/${token}`,
 				formFields,
 			);
 		return data;

@@ -18,5 +18,10 @@ export default defineConfig({
 		setupFiles: './src/test/setup.ts',
 		css: true,
 		pool: 'forks',
+		coverage: {
+			provider: 'istanbul', // or 'v8'
+			reporter: ['text', 'html'],
+			reportsDirectory: './src/test/coverage',
+		},
 	},
 });
