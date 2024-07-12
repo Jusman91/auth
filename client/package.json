@@ -12,6 +12,7 @@
 		"test:coverage": "vitest run --coverage"
 	},
 	"dependencies": {
+		"@juggle/resize-observer": "^3.4.0",
 		"@react-three/drei": "^9.106.0",
 		"@react-three/fiber": "^8.16.8",
 		"@react-three/postprocessing": "^2.16.2",
