@@ -43,6 +43,7 @@
 		"@vitejs/plugin-react": "^4.2.1",
 		"@vitest/coverage-istanbul": "^2.0.1",
 		"autoprefixer": "^10.4.16",
+		"axios-mock-adapter": "^1.22.0",
 		"clsx": "^2.1.1",
 		"eslint": "^8.57.0",
 		"eslint-plugin-react-hooks": "^4.6.0",
