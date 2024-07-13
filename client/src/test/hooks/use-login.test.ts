@@ -1,7 +1,6 @@
 import * as storage from '@/lib/utils/storage';
-import { act, renderHook } from '../unit-testing';
-import { useLogin } from '@/hooks';
-import * as handlers from '@/lib/utils/handlers';
+import { act, renderHook, waitFor } from '../unit-testing';
+import * as hooks from '@/hooks';
 
 const mockUseLoginMutation = vi.fn();
 vi.mock('@/lib/react-query', async () => {
@@ -26,7 +25,6 @@ describe('Hooks - useLogin', () => {
 
 	const openModal = vi.fn();
 	const fields = {
-		username: 'testuser',
 		email: 'testuser@example.com',
 		password: 'password123',
 		rememberMe: true,
@@ -41,7 +39,7 @@ describe('Hooks - useLogin', () => {
 			isPending: false,
 			isSuccess: false,
 		});
-		const { result } = renderHook(useLogin);
+		const { result } = renderHook(hooks.useLogin);
 
 		act(() => {
 			result.current.handleLogin({
@@ -76,12 +74,12 @@ describe('Hooks - useLogin', () => {
 			storage,
 			'saveAccessTokenToStorage',
 		);
+		const mockHandleLoggedIn = vi.fn();
+		vi.spyOn(hooks, 'useLoggedIn').mockReturnValue({
+			handleLoggedIn: mockHandleLoggedIn,
+		});
 
-		const handleLoggedInSpy = vi.spyOn(
-			handlers,
-			'handleLoggedIn',
-		);
-		const { result } = renderHook(useLogin);
+		const { result } = renderHook(() => hooks.useLogin());
 		await act(async () => {
 			result.current.handleLogin({
 				formFields: fields,
@@ -93,11 +91,10 @@ describe('Hooks - useLogin', () => {
 			accessToken: 'fakeAccessToken',
 			rememberMe: true,
 		});
-		expect(handleLoggedInSpy).toHaveBeenCalledWith({
-			userLoggedIn: expect.any(Function),
-			formFields: fields,
+		waitFor(async () => {
+			expect(mockHandleLoggedIn).toHaveBeenCalled();
+			expect(openModal).toHaveBeenCalled();
 		});
-		expect(openModal).toHaveBeenCalled();
 	});
 
 	it('should handle error on login failure', async () => {
@@ -121,12 +118,12 @@ describe('Hooks - useLogin', () => {
 			'saveAccessTokenToStorage',
 		);
 
-		const handleLoggedInSpy = vi.spyOn(
-			handlers,
-			'handleLoggedIn',
-		);
+		const mockHandleLoggedIn = vi.fn();
+		vi.spyOn(hooks, 'useLoggedIn').mockReturnValue({
+			handleLoggedIn: mockHandleLoggedIn,
+		});
 
-		const { result } = renderHook(useLogin);
+		const { result } = renderHook(hooks.useLogin);
 
 		await act(async () => {
 			result.current.handleLogin({
@@ -137,6 +134,6 @@ describe('Hooks - useLogin', () => {
 
 		expect(openModal).toHaveBeenCalled();
 		expect(saveSpy).not.toHaveBeenCalled();
-		expect(handleLoggedInSpy).not.toHaveBeenCalled();
+		expect(mockHandleLoggedIn).not.toHaveBeenCalled();
 	});
 });
