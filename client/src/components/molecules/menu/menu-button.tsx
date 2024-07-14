@@ -13,7 +13,7 @@ const MenuButton = ({ setOpen }: IMenuButton) => {
 				<IconSvg
 					className='w-24 h-24 object-cover'
 					src={ICON_MENU}
-					alt='Logout'
+					alt='menu'
 				/>
 			</Button>
 		</Tooltip>

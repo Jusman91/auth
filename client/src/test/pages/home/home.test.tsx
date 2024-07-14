@@ -14,7 +14,7 @@ describe('Pages- Home', () => {
 		RenderHome();
 		const elements = [
 			screen.getAllByRole('img', { name: /star/i })[0],
-			screen.getByRole('img', { name: /logout/i }),
+			screen.getByRole('img', { name: /menu/i }),
 			screen.getByRole('heading', { name: /welcome/i }),
 			screen.getByRole('heading', {
 				name: 'This website was created for learning,',
@@ -23,13 +23,13 @@ describe('Pages- Home', () => {
 				name: 'so if you log out your account will be',
 			}),
 			screen.getByRole('heading', { name: 'Deleted' }),
-			screen.getByRole('button', { name: 'Logout' }),
-			screen.getByLabelText('home'),
-			screen.getByLabelText('about'),
-			screen.getByLabelText('contact'),
-			screen.getByLabelText('github'),
-			screen.getByLabelText('linkedin'),
-			screen.getByLabelText('logout'),
+			screen.getByRole('button', { name: /menu/i }),
+			screen.getByRole('button', { name: /home/i }),
+			screen.getByRole('button', { name: /about/i }),
+			screen.getByRole('button', { name: /contact/i }),
+			screen.getByRole('button', { name: /github/i }),
+			screen.getByRole('button', { name: /linkedin/i }),
+			screen.getByRole('button', { name: /logout/i }),
 		];
 		elements.forEach((el) => {
 			expect(el).toBeInTheDocument();
