@@ -7,7 +7,7 @@ export default async function registerUser(
 	try {
 		const { data } =
 			await axiosInstance.post<IRegisterResponse>(
-				'auth/register',
+				'/auth/register',
 				params,
 			);
 		return data;

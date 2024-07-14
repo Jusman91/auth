@@ -15,6 +15,7 @@ const MenuListButton = ({
 					className='w-full h-full'
 					icon={getIconMenus(label)}
 					onClick={onClick}
+					aria-label={label}
 				/>
 			</Tooltip>
 		</div>

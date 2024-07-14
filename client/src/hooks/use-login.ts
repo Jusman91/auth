@@ -1,10 +1,7 @@
-import {
-	useLoggedInQuery,
-	useLoginMutation,
-} from '@/lib/react-query';
-import { handleLoggedIn } from '@/lib/utils/handlers';
+import { useLoginMutation } from '@/lib/react-query';
 import { saveAccessTokenToStorage } from '@/lib/utils/storage';
 import { IHandleLoginProps } from '@/types';
+import useLoggedIn from './use-loggedin';
 
 const useLogin = () => {
 	const {
@@ -14,8 +11,7 @@ const useLogin = () => {
 		isSuccess,
 		isPending: loading,
 	} = useLoginMutation();
-	const { refetch: userLoggedIn } = useLoggedInQuery();
-
+	const { handleLoggedIn } = useLoggedIn();
 	const handleLogin = ({
 		formFields,
 		openModal,
@@ -27,7 +23,7 @@ const useLogin = () => {
 					accessToken: res?.accessToken ?? '',
 					rememberMe: rememberMe,
 				});
-				await handleLoggedIn({ userLoggedIn, formFields });
+				await handleLoggedIn({ formFields });
 				openModal();
 			},
 			onError: (err) => {

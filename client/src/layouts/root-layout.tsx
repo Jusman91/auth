@@ -18,7 +18,7 @@ const RootLayout = () => {
 
 	return (
 		<ConfigProvider theme={rootTheme}>
-			<main>
+			<main role='main'>
 				<Layout className='relative w-full min-h-screen overflow-x-hidden bg-bkg-base'>
 					<Outlet />
 					<Footer />

@@ -1,16 +1,15 @@
 import { IHandleMenus } from '@/types';
-import { hadndleDeleteUser } from './user';
 
 export function handleMenus({
 	label,
 	path,
 	newTab,
-	navigate,
-	userDeleted,
 	id,
+	navigate,
+	handleDeleteUser,
 }: IHandleMenus) {
 	if (label === 'logout') {
-		hadndleDeleteUser({ id, userDeleted, navigate });
+		handleDeleteUser({ id, navigate });
 	} else if (newTab) {
 		window.open(path, '_blank');
 	} else {

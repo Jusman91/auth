@@ -3,9 +3,11 @@ import {
 	clearUserInStorage,
 	getAccessTokenInStorage,
 } from '../utils/storage';
+import { VITE_API_URL } from '@/env';
+import { useNavigate } from 'react-router-dom';
 
 const axiosInstance = axios.create({
-	baseURL: `${import.meta.env.VITE_API_URL}`,
+	baseURL: `${VITE_API_URL}`,
 	headers: {
 		'Content-Type': 'application/json',
 	},
@@ -26,7 +28,8 @@ axiosInstance.interceptors.response.use(
 	(error) => {
 		if (error.response && error.response.status === 401) {
 			clearUserInStorage();
-			window.location.href = '/auth/token-expired';
+			const navigate = useNavigate();
+			navigate('/auth/token-expired');
 		}
 		return Promise.reject(error);
 	},

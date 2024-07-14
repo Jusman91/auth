@@ -3,8 +3,7 @@ import {
 	MenuButton,
 	MenuListButton,
 } from '@/components/molecules';
-import { useToggle } from '@/hooks';
-import { useDeleteUser } from '@/lib/react-query';
+import { useDelete, useToggle } from '@/hooks';
 import { cn } from '@/lib/utils';
 import { handleMenus } from '@/lib/utils/handlers';
 import { getUserInStorage } from '@/lib/utils/storage';
@@ -14,10 +13,10 @@ import { useNavigate } from 'react-router-dom';
 
 const Menus = () => {
 	const user = getUserInStorage();
+	const id = user?.id;
 	const [open, setOpen] = useToggle(false);
 	const navigate = useNavigate();
-	const { mutate: userDeleted, isPending: isDeleting } =
-		useDeleteUser();
+	const { handleDeleteUser, isDeleting } = useDelete();
 	const onClick = (
 		e: React.MouseEvent,
 		item: IMenuListData,
@@ -27,9 +26,10 @@ const Menus = () => {
 			label: item.label,
 			path: item.path,
 			newTab: item.newTab,
+			id,
 			navigate,
-			userDeleted,
-			id: user?.id,
+			handleDeleteUser: () =>
+				handleDeleteUser({ id, navigate }),
 		});
 	};
 	return (
@@ -39,7 +39,8 @@ const Menus = () => {
 				open ? 'w-full' : 'w-0',
 			)}>
 			<MenuButton setOpen={() => setOpen()} />
-			<div
+			<ul
+				aria-label='menu-list'
 				className={cn(
 					'flex items-center gap-4 w-0 opacity-0 duration-500',
 					open
@@ -53,7 +54,7 @@ const Menus = () => {
 						onClick={(e) => onClick(e, item)}
 					/>
 				))}
-			</div>
+			</ul>
 			{isDeleting ? (
 				<Loading
 					className='text-color-base'

@@ -14,6 +14,7 @@ const TwinkleStarsBackground = () => {
 						animationDelay: `${Math.random() * 2}s`,
 					}}
 					src={ICON_STAR}
+					alt='Star'
 				/>
 			))}
 		</div>

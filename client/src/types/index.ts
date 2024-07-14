@@ -4,10 +4,7 @@ import type {
 	ModalProps,
 } from 'antd';
 import { Rule } from 'antd/es/form';
-import {
-	QueryObserverResult,
-	UseMutateFunction,
-} from '@tanstack/react-query';
+import { UseMutateFunction } from '@tanstack/react-query';
 import { ReactNode } from 'react';
 import { type Transition } from 'framer-motion';
 
@@ -194,9 +191,6 @@ export interface IButtonSubmitFormProps {
 	className?: string;
 }
 export interface IHandleLoggedInProps {
-	userLoggedIn: () => Promise<
-		QueryObserverResult<IUser | undefined, Error>
-	>;
 	formFields: ILoginFields;
 }
 export interface IHandleLoginProps {
@@ -232,7 +226,6 @@ export interface IUser {
 }
 export interface IHandleDeleteUser {
 	id: string;
-	userDeleted: MutateFunction<IDeleteUserResponse, string>;
 	navigate: (path: string) => void;
 }
 // <user/>
@@ -256,12 +249,10 @@ export interface IMenuListData {
 export interface IHandleMenus extends IMenuListData {
 	navigate: (path: string) => void;
 	id: string;
-	userDeleted: UseMutateFunction<
-		IDeleteUserResponse | undefined,
-		Error | null,
-		string,
-		unknown
-	>;
+	handleDeleteUser: (params: {
+		id: string;
+		navigate: (path: string) => void;
+	}) => void;
 }
 export interface IMenuButton {
 	setOpen: () => void;
