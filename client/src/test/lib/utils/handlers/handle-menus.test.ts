@@ -39,4 +39,24 @@ describe('handleMenus', () => {
 
 		expect(mockNavigate).toHaveBeenCalledWith('/');
 	});
+
+	it('should call handleDeleteUser when label is logout', () => {
+		const mockHandleDeleteUser = vi.fn();
+		const mockNavigate = vi.fn();
+		const params: IHandleMenus = {
+			label: 'logout',
+			path: '/logout',
+			newTab: false,
+			id: '123',
+			navigate: mockNavigate,
+			handleDeleteUser: mockHandleDeleteUser,
+		};
+
+		handleMenus(params);
+
+		expect(mockHandleDeleteUser).toHaveBeenCalledWith({
+			id: '123',
+			navigate: mockNavigate,
+		});
+	});
 });
