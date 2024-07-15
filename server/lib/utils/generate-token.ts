@@ -6,7 +6,7 @@ import {
 
 export const generateAccessToken = (payload: object) => {
 	return jwt.sign(payload, `${ACCESS_TOKEN_SECRET_KEY}`, {
-		expiresIn: '1h',
+		expiresIn: '1d',
 	});
 };
 

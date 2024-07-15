@@ -9,7 +9,7 @@ const HeroHomePage = () => {
 		<div className='flex flex-col justify-center items-center min-h-screen relative'>
 			<TwinkleStarsBackground />
 			<BgVideo />
-			<div className='w-full px-20 absolute z-[10]'>
+			<div className='w-full px-6 lg:px-20 absolute z-[10]'>
 				<motion.div initial='hidden' animate='visible'>
 					<div className='flex justify-between items-center gap-8'>
 						<HeroContentLeft />

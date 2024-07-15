@@ -9,9 +9,9 @@ const MenuButton = ({ setOpen }: IMenuButton) => {
 			<Button
 				onClick={() => setOpen()}
 				type='text'
-				className='w-24 h-24'>
+				className='w-12 h-12 md:w-24 md:h-24'>
 				<IconSvg
-					className='w-24 h-24 object-cover'
+					className='w-12 h-12 md:w-24 md:h-24 object-cover'
 					src={ICON_MENU}
 					alt='menu'
 				/>

@@ -8,7 +8,7 @@ const MenuListButton = ({
 	onClick,
 }: IMenuListButtonProps) => {
 	return (
-		<div className='flex justify-center items-center w-16 h-16 rounded-full shadow-elements hover:shadow-glass-sm cursor-pointer'>
+		<div className='flex justify-center items-center w-4 h-4 md:w-16 md:h-16 rounded-full shadow-elements hover:shadow-glass-sm cursor-pointer'>
 			<Tooltip title={label} rootClassName='capitalize'>
 				<Button
 					type='link'

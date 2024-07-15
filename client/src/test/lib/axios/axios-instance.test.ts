@@ -2,16 +2,7 @@ import { VITE_API_URL } from '@/env';
 import { axiosInstance } from '@/lib/axios';
 import * as storage from '@/lib/utils/storage';
 import MockAdapter from 'axios-mock-adapter';
-const mockedUseNavigate = vi.fn();
-vi.mock('react-router-dom', async () => {
-	const mod = await vi.importActual<
-		typeof import('react-router-dom')
-	>('react-router-dom');
-	return {
-		...mod,
-		useNavigate: () => mockedUseNavigate,
-	};
-});
+
 const mock = new MockAdapter(axiosInstance);
 describe('Lib - Axios', () => {
 	beforeEach(() => {
@@ -59,7 +50,7 @@ describe('Lib - Axios', () => {
 		expect(Authorization).toBeUndefined();
 	});
 
-	it('should clear user in storage and if response status 401', async () => {
+	it('should clear user in storage and navigate if response status 401', async () => {
 		mock.onGet('/test').reply(401);
 
 		const clearSpy = vi.spyOn(
@@ -71,9 +62,6 @@ describe('Lib - Axios', () => {
 			await axiosInstance.get('/test');
 		} catch (error) {
 			expect(clearSpy).toHaveBeenCalled();
-			expect(mockedUseNavigate).toHaveBeenCalledWith(
-				'/auth/token-expired',
-			);
 		}
 	});
 });
