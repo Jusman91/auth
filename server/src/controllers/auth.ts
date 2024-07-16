@@ -7,7 +7,7 @@ import {
 	verifyTokenResetPassword,
 } from '../middleware';
 import { IUserRequest } from '../types';
-import { BASE_URL, CLIENT_URL } from '../config';
+import { CLIENT_URL } from '../config';
 import { sendEmail } from '../lib/nodemailer';
 import {
 	comparePassword,
@@ -111,7 +111,7 @@ export const forgotPassword: RequestHandler = async (
 			id: existingUser.id,
 			role: existingUser.role,
 		});
-		const url = `${CLIENT_URL}/${BASE_URL}/auth/reset-password/${existingUser.id}/${token}`;
+		const url = `${CLIENT_URL}/auth/reset-password/${existingUser.id}/${token}`;
 
 		console.log('Generated token:', token);
 		console.log('Reset URL:', url);
