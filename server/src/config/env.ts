@@ -2,7 +2,6 @@ import * as dotenv from 'dotenv';
 dotenv.config();
 
 const {
-	PORT,
 	BASE_URL,
 	DATABASE_URL,
 	ACCESS_TOKEN_SECRET_KEY,
@@ -13,7 +12,6 @@ const {
 } = process.env;
 
 export {
-	PORT,
 	BASE_URL,
 	DATABASE_URL,
 	ACCESS_TOKEN_SECRET_KEY,
