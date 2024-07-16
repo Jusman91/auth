@@ -15,17 +15,6 @@ export const sendEmail = async (
 			url,
 		});
 
-		// const result = await transport.sendMail(
-		// 	mailOptions,
-		// 	function (err, info) {
-		// 		if (err) {
-		// 			console.log(err);
-		// 		} else {
-		// 			console.log('Sent mail', info.response);
-		// 		}
-		// 	},
-		// );
-
 		const result = await new Promise((resolve, reject) => {
 			transport.sendMail(mailOptions, (err, info) => {
 				if (err) {
